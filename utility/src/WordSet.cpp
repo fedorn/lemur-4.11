@@ -39,7 +39,7 @@ lemur::utility::WordSet::load(const string &filename) {
   lastfile = filename;
   ifstream ifstr(filename.c_str());
   // return if the file can't be opened
-  if (ifstr == NULL) {
+  if (ifstr.fail()) {
     LEMUR_THROW(LEMUR_IO_ERROR, "Cannot open file");
     return;
   }
