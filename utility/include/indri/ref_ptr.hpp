@@ -110,7 +110,7 @@ namespace indri {
         return _ref == other._ref;
       }
 
-      atomic::value_type references() {
+      long references() {
         if( _ref )
           return _ref->counter;
         return 0;

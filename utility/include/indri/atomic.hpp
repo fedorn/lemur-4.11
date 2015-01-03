@@ -30,7 +30,7 @@
 namespace indri {
   /*! \brief Atomic actions for thread support */
   namespace atomic {
-#ifdef WIN32
+#if defined(WIN32)
     typedef volatile LONG value_type;
 
     inline void increment( value_type& variable ) {
@@ -39,6 +39,16 @@ namespace indri {
 
     inline void decrement( value_type& variable ) {
       ::InterlockedDecrement( &variable );
+    }
+#elif defined(__APPLE__)
+    // typedef int value_type;
+    typedef atomic_long value_type;
+    inline void increment( value_type& variable ) {
+      ++variable;
+    }
+
+    inline void decrement( value_type& variable ) {
+      --variable;
     }
 #else
     // GCC 3.4+ declares these in the __gnu_cxx namespace, 3.3- does not.
