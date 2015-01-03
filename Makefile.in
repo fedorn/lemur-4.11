@@ -1,0 +1,54 @@
+include MakeDefns
+# module ("library") directories
+LIBDIRS = @MODULES@
+
+# application directories
+APPDIRS = @APPDIRS@
+
+DIRS = $(LIBDIRS) $(APPDIRS)
+
+# derived targets for sub directories
+OBJDIRS = $(DIRS:%=%/obj)
+DEPENDDIRS = $(DIRS:%=%/depend)
+
+INSTALLDIRS = $(bindir) $(includedir) $(includedir)/indri $(libdir)
+
+MF = ../src/Makefile
+
+.PHONY: all lib clean install install-bin install-lib install-site-search $(DIRS) $(INSTALLDIRS) swig site-search ireval
+
+all: $(DIRS) swig site-search ireval
+
+lib: $(LIBDIRS)
+
+$(OBJDIRS) $(DEPENDDIRS) $(INSTALLDIRS):
+	$(INSTALL_DIR) $@
+
+$(DIRS): $(OBJDIRS) $(DEPENDDIRS)
+	$(MAKE) -C $@/obj -f $(MF) all
+
+site-search:
+	$(MAKE) -C $@ all
+
+swig ireval:
+	$(MAKE) -C $@/src all
+
+clean:
+	for dir in $(DIRS) ; do $(MAKE) -C $$dir/obj -f $(MF) clean ; done
+	$(MAKE) -C site-search clean
+	$(MAKE) -C swig/src clean
+	$(MAKE) -C ireval/src clean
+
+install: install-lib install-bin install-site-search
+
+install-site-search:
+	$(MAKE) -C site-search install
+
+install-bin: $(INSTALLDIRS)
+	for dir in $(APPDIRS) ; do $(MAKE) -C $$dir/obj -f $(MF) install; done
+
+install-lib: $(INSTALLDIRS)
+	rm -f $(libdir)/$(LEMURLIB)
+	for dir in $(LIBDIRS) ; do $(MAKE) -C $$dir/obj -f $(MF) install; done
+	$(MAKE) -C swig/src install
+	$(MAKE) -C ireval/src install
