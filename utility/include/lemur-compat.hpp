@@ -219,14 +219,6 @@ inline UINT64 htonll( UINT64 native ) {
 inline UINT64 ntohll( UINT64 native ) {
   return native;
 }
-#else
-inline UINT64 htonll( UINT64 native ) {
-  return flipll( native );
-}
-
-inline UINT64 ntohll( UINT64 native ) {
-  return flipll( native );
-}
 #endif
 
 void initializeNetwork();
