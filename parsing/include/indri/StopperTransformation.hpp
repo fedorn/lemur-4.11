@@ -68,7 +68,7 @@ namespace indri
 #if HAVE_GCC_VERSION(4,3)
       typedef std::tr1::unordered_set<char *, std::tr1::hash<std::string>, eqstr> dictTable;
 #else
-      typedef hash_set<char *, hash<char *>, eqstr> dictTable;
+      typedef hash_set<char *, std::hash<char *>, eqstr> dictTable;
 #endif
 #endif
 

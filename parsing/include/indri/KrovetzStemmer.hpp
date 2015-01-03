@@ -149,7 +149,7 @@ namespace indri
 #if HAVE_GCC_VERSION(4,3)
       typedef std::tr1::unordered_map<const char *, dictEntry, std::tr1::hash<const char *>, eqstr> dictTable;
 #else
-      typedef hash_map<const char *, dictEntry, hash<const char *>, eqstr> dictTable;
+      typedef hash_map<const char *, dictEntry, std::hash<const char *>, eqstr> dictTable;
 #endif
 #endif
       dictTable dictEntries;
